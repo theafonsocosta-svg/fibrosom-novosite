@@ -811,25 +811,22 @@
       .newsletter-box { padding: 32px 20px; }
       #scroll-animation { height: 300vh; }
 
-      /* Annotation cards — centralized and beautiful for mobile */
+      /* Annotation cards — Moved completely out of the way of the truck */
       .anno-card {
-        max-width: 85%;
-        padding: 16px 20px;
-        border-radius: 16px;
+        max-width: 90%;
+        padding: 24px;
+        border-radius: 24px;
         left: 50% !important;
-        transform: translate(-50%, 16px);
+        transform: translate(-50%, 24px);
       }
       .anno-card.visible {
         transform: translate(-50%, 0);
       }
-      .anno-card-desc, .anno-card-stat-label { display: block; font-size: 0.8rem; margin-top: 4px; }
-      .anno-card-stat { font-size: 1.2rem; margin-top: 4px; }
+      .anno-card-desc, .anno-card-stat-label { display: block; font-size: 0.9rem; margin-top: 6px; }
+      .anno-card-stat { font-size: 1.4rem; margin-top: 8px; }
 
-      /* Position them stacked or floating near the center/truck axis */
-      #card-1 { top: auto; bottom: 35%; }
-      #card-2 { top: auto; bottom: 35%; }
-      #card-3 { top: auto; bottom: 35%; }
-      #card-4 { top: auto; bottom: 35%; }
+      /* Sit them elegantly at the bottom */
+      #card-1, #card-2, #card-3, #card-4 { top: auto; bottom: 8%; }
 
       .hero-title { font-size: 2.2rem; }
       .hero-subtitle { font-size: 0.95rem; }
@@ -1344,25 +1341,33 @@ function drawFrame(idx) {
   let scaleContain = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
 
   if (isMobile) {
-    // 1. Draw blurred 'ambi-light' background using Cover fit
-    let dwCover = img.naturalWidth * scaleCover;
-    let dhCover = img.naturalHeight * scaleCover;
-    let dxCover = (cw - dwCover) / 2;
-    let dyCover = (ch - dhCover) / 2;
-    
-    scrollCtx.save();
-    scrollCtx.filter = 'blur(60px) brightness(0.7)';
-    scrollCtx.drawImage(img, dxCover, dyCover, dwCover, dhCover);
-    scrollCtx.restore();
-
-    // 2. Draw sharp 'Contain' fit frame on top
+    // Sharp 'Contain' fit frame
     let dwContain = img.naturalWidth * scaleContain;
     let dhContain = img.naturalHeight * scaleContain;
     let dxContain = (cw - dwContain) / 2;
-    // Push the truck slightly up or keep centered
-    let dyContain = (ch - dhContain) / 2 - 40; 
-    
+    // Push the truck UP by 12% of screen height to leave massive free space below
+    let dyContain = (ch - dhContain) / 2 - (ch * 0.12); 
+
+    // 1. Fill background with premium dark navy
+    scrollCtx.fillStyle = '#030712';
+    scrollCtx.fillRect(0, 0, cw, ch);
+
+    // 2. Draw the clean 3D frame
     scrollCtx.drawImage(img, dxContain, dyContain, dwContain, dhContain);
+
+    // 3. Cinematic Edge Fading — Top
+    let gradTop = scrollCtx.createLinearGradient(0, dyContain, 0, dyContain + dhContain * 0.25);
+    gradTop.addColorStop(0, '#030712');
+    gradTop.addColorStop(1, 'rgba(3, 7, 18, 0)');
+    scrollCtx.fillStyle = gradTop;
+    scrollCtx.fillRect(0, dyContain - 2, cw, dhContain * 0.25 + 2);
+
+    // 4. Cinematic Edge Fading — Bottom
+    let gradBottom = scrollCtx.createLinearGradient(0, dyContain + dhContain * 0.75, 0, dyContain + dhContain);
+    gradBottom.addColorStop(0, 'rgba(3, 7, 18, 0)');
+    gradBottom.addColorStop(1, '#030712');
+    scrollCtx.fillStyle = gradBottom;
+    scrollCtx.fillRect(0, dyContain + dhContain * 0.75, cw, dhContain * 0.25 + 2);
   } else {
     // Desktop: Cover fit
     let dwCover = img.naturalWidth * scaleCover;
