@@ -811,7 +811,7 @@
       .newsletter-box { padding: 32px 20px; }
       #scroll-animation { height: 300vh; }
 
-      /* Annotation cards — Moved completely out of the way of the truck */
+      /* Annotation cards — Moved closer to the truck */
       .anno-card {
         max-width: 90%;
         padding: 24px;
@@ -825,8 +825,11 @@
       .anno-card-desc, .anno-card-stat-label { display: block; font-size: 0.9rem; margin-top: 6px; }
       .anno-card-stat { font-size: 1.4rem; margin-top: 8px; }
 
-      /* Sit them elegantly at the bottom */
-      #card-1, #card-2, #card-3, #card-4 { top: auto; bottom: 8%; }
+      /* Sit them right below the truck instead of the bottom edge */
+      #card-1, #card-2, #card-3, #card-4 { top: 60%; bottom: auto; }
+      
+      /* Esconder os pontinhos de progresso em mobile */
+      .scroll-label { display: none; }
 
       .hero-title { font-size: 2.2rem; }
       .hero-subtitle { font-size: 0.95rem; }
@@ -922,7 +925,6 @@
     </div>
   </div>
   <div class="hero-scroll-hint">
-    <span>Scroll</span>
     <div class="arrow"></div>
   </div>
 </section>
@@ -1345,29 +1347,34 @@ function drawFrame(idx) {
     let dwContain = img.naturalWidth * scaleContain;
     let dhContain = img.naturalHeight * scaleContain;
     let dxContain = (cw - dwContain) / 2;
-    // Push the truck UP by 12% of screen height to leave massive free space below
+    // Push the truck UP by 12% of screen height
     let dyContain = (ch - dhContain) / 2 - (ch * 0.12); 
 
-    // 1. Fill background with premium dark navy
-    scrollCtx.fillStyle = '#030712';
-    scrollCtx.fillRect(0, 0, cw, ch);
+    // Leave background fully transparent so the Starscape shows through perfectly!
+    scrollCtx.clearRect(0, 0, cw, ch);
 
-    // 2. Draw the clean 3D frame
+    // Draw the 3D frame
     scrollCtx.drawImage(img, dxContain, dyContain, dwContain, dhContain);
 
-    // 3. Cinematic Edge Fading — Top
+    // Apply composite mode to fade edges to transparent
+    scrollCtx.globalCompositeOperation = 'destination-out';
+
+    // Cinematic Edge Fading — Top cuts out to transparent
     let gradTop = scrollCtx.createLinearGradient(0, dyContain, 0, dyContain + dhContain * 0.25);
-    gradTop.addColorStop(0, '#030712');
-    gradTop.addColorStop(1, 'rgba(3, 7, 18, 0)');
+    gradTop.addColorStop(0, 'rgba(0, 0, 0, 1)'); // completely transparent gap
+    gradTop.addColorStop(1, 'rgba(0, 0, 0, 0)'); // keeps solid image
     scrollCtx.fillStyle = gradTop;
     scrollCtx.fillRect(0, dyContain - 2, cw, dhContain * 0.25 + 2);
 
-    // 4. Cinematic Edge Fading — Bottom
+    // Cinematic Edge Fading — Bottom cuts out to transparent
     let gradBottom = scrollCtx.createLinearGradient(0, dyContain + dhContain * 0.75, 0, dyContain + dhContain);
-    gradBottom.addColorStop(0, 'rgba(3, 7, 18, 0)');
-    gradBottom.addColorStop(1, '#030712');
+    gradBottom.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    gradBottom.addColorStop(1, 'rgba(0, 0, 0, 1)');
     scrollCtx.fillStyle = gradBottom;
     scrollCtx.fillRect(0, dyContain + dhContain * 0.75, cw, dhContain * 0.25 + 2);
+    
+    // Restore composite mode
+    scrollCtx.globalCompositeOperation = 'source-over';
   } else {
     // Desktop: Cover fit
     let dwCover = img.naturalWidth * scaleCover;
