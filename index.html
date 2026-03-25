@@ -1321,25 +1321,16 @@ function drawFrame(idx) {
 
   let scale, dx, dy, dw, dh;
 
-  if (isMobile) {
-    // Contain fit on mobile portrait — show full frame, centered, navy background
-    scale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
-    dw = img.naturalWidth * scale;
-    dh = img.naturalHeight * scale;
-    dx = (cw - dw) / 2;
-    dy = (ch - dh) / 2;
-    scrollCtx.fillStyle = '#0B1829';
-    scrollCtx.fillRect(0, 0, cw, ch);
-    scrollCtx.drawImage(img, dx, dy, dw, dh);
-  } else {
-    // Cover fit on desktop — fills canvas edge to edge
-    scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    dw = img.naturalWidth * scale;
-    dh = img.naturalHeight * scale;
-    dx = (cw - dw) / 2;
-    dy = (ch - dh) / 2;
-    scrollCtx.drawImage(img, dx, dy, dw, dh);
-  }
+  // Cover fit on both mobile and desktop — fills canvas edge to edge
+  scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+  dw = img.naturalWidth * scale;
+  dh = img.naturalHeight * scale;
+  
+  // Center the frame
+  dx = (cw - dw) / 2;
+  dy = (ch - dh) / 2;
+
+  scrollCtx.drawImage(img, dx, dy, dw, dh);
 
   lastFrame = idx;
 }
