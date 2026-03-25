@@ -720,34 +720,99 @@
 
     .footer-prr img { max-height: 48px; opacity: 0.6; filter: brightness(1.5); }
 
+    /* ─── HAMBURGER ──────────────────────────────────────── */
+    .nav-hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 6px;
+      background: none; border: none;
+    }
+    .nav-hamburger span {
+      display: block; width: 22px; height: 2px;
+      background: var(--white); border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+    .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+    .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    #mobile-menu {
+      display: none;
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 99;
+      background: rgba(11, 24, 41, 0.97);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px;
+    }
+    #mobile-menu.open { display: flex; }
+    #mobile-menu a {
+      font-family: var(--font-head);
+      font-size: 1.6rem; font-weight: 600;
+      color: var(--white); text-decoration: none;
+      padding: 12px 32px; border-radius: 12px;
+      transition: color 0.2s, background 0.2s;
+      letter-spacing: -0.01em;
+    }
+    #mobile-menu a:hover { color: var(--green); }
+    #mobile-menu .mobile-cta {
+      margin-top: 16px;
+      background: var(--green); color: var(--navy) !important;
+      font-size: 1rem !important; font-weight: 700 !important;
+      padding: 14px 36px !important;
+    }
+    #mobile-menu .mobile-phone {
+      font-family: var(--font-body);
+      font-size: 0.85rem; color: var(--gray);
+      margin-top: 24px;
+    }
+
     /* ─── RESPONSIVE ─────────────────────────────────────── */
     @media (max-width: 900px) {
       .sobre-grid { grid-template-columns: 1fr; gap: 40px; }
-      .sobre-right { display: none; }
+      .sobre-right { display: flex; }
       .produtos-grid { grid-template-columns: 1fr 1fr; }
       .stats-grid { grid-template-columns: repeat(2, 1fr); }
       .stat-item { border-right: none; border-bottom: 1px solid var(--border-blue); }
-      .stat-item:nth-child(2n) { border-bottom: 1px solid var(--border-blue); }
       .stat-item:nth-child(3), .stat-item:nth-child(4) { border-bottom: none; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
       .nav-links { display: none; }
       .nav-phone { display: none; }
+      .nav-hamburger { display: flex; }
+      #navbar { top: 12px; width: calc(100% - 32px); padding: 12px 20px; }
+      #navbar.scrolled { padding: 10px 18px; }
     }
 
     @media (max-width: 600px) {
-      .sobre-highlights { grid-template-columns: 1fr; }
+      .sobre-highlights { grid-template-columns: 1fr 1fr; }
+      .sobre-right { flex-direction: column; }
       .produtos-grid { grid-template-columns: 1fr; }
       .produtos-row-2 { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr 1fr; }
       .footer-grid { grid-template-columns: 1fr; }
-      .newsletter-box { padding: 36px 24px; }
-      #scroll-animation { height: 250vh; }
-      .anno-card { max-width: 200px; padding: 14px 16px; }
+      .newsletter-box { padding: 32px 20px; }
+      #scroll-animation { height: 300vh; }
+
+      /* Annotation cards — slim bar at bottom */
+      .anno-card {
+        max-width: calc(50% - 12px);
+        padding: 10px 12px;
+        border-radius: 12px;
+      }
       .anno-card-desc, .anno-card-stat-label { display: none; }
-      #card-1, #card-2 { top: auto; bottom: 80px; }
-      #card-1 { left: 8px; right: auto; }
-      #card-2 { right: 8px; left: auto; }
-      #card-3, #card-4 { display: none; }
+      .anno-card-stat { font-size: 1.1rem; }
+
+      /* Position all 4 cards at the bottom in a 2×2 grid */
+      #card-1 { left: 8px; top: auto; bottom: 90px; right: auto; }
+      #card-2 { right: 8px; top: auto; bottom: 90px; left: auto; }
+      #card-3 { left: 8px; top: auto; bottom: 16px; right: auto; }
+      #card-4 { right: 8px; top: auto; bottom: 16px; left: auto; }
+
+      .hero-title { font-size: 2.2rem; }
+      .hero-subtitle { font-size: 0.95rem; }
+      #sobre { padding: 80px 20px; }
+      #produtos { padding: 60px 20px 80px; }
     }
   </style>
 </head>
@@ -795,7 +860,20 @@
     <li><a href="#newsletter" class="nav-cta">Receber Novidades</a></li>
   </ul>
   <span class="nav-phone">(+351) 252 300 990</span>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE MENU -->
+<div id="mobile-menu">
+  <a href="#sobre" class="mobile-link">Empresa</a>
+  <a href="#produtos" class="mobile-link">Produtos</a>
+  <a href="#" class="mobile-link">Catálogos</a>
+  <a href="#footer" class="mobile-link">Contactos</a>
+  <a href="#newsletter" class="mobile-cta mobile-link">Receber Novidades</a>
+  <span class="mobile-phone">(+351) 252 300 990</span>
+</div>
 
 <!-- HERO -->
 <section id="hero">
@@ -1242,23 +1320,13 @@ function drawFrame(idx) {
 
   let scale, sx, sy, sw, sh, dx, dy, dw, dh;
 
-  if (isMobile) {
-    // Zoomed contain: show full image, centered
-    scale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight) * 1.05;
-    dw = img.naturalWidth * scale;
-    dh = img.naturalHeight * scale;
-    dx = (cw - dw) / 2;
-    dy = (ch - dh) / 2;
-    scrollCtx.drawImage(img, dx, dy, dw, dh);
-  } else {
-    // Cover fit: fill entire canvas
-    scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-    dw = img.naturalWidth * scale;
-    dh = img.naturalHeight * scale;
-    dx = (cw - dw) / 2;
-    dy = (ch - dh) / 2;
-    scrollCtx.drawImage(img, dx, dy, dw, dh);
-  }
+  // Cover fit on all devices — fills canvas edge to edge
+  scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+  dw = img.naturalWidth * scale;
+  dh = img.naturalHeight * scale;
+  dx = (cw - dw) / 2;
+  dy = (ch - dh) / 2;
+  scrollCtx.drawImage(img, dx, dy, dw, dh);
 
   lastFrame = idx;
 }
@@ -1428,6 +1496,26 @@ const statsObserver = new IntersectionObserver((entries) => {
 
 const statsSection = document.getElementById('stats');
 if (statsSection) statsObserver.observe(statsSection);
+
+/* ════════════════════════════════════════════════════
+   HAMBURGER MENU
+════════════════════════════════════════════════════ */
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobile-menu');
+
+hamburger.addEventListener('click', () => {
+  const isOpen = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', isOpen);
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+});
+
+document.querySelectorAll('.mobile-link').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+});
 
 /* ════════════════════════════════════════════════════
    SMOOTH ANCHOR LINKS
