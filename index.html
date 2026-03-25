@@ -1315,13 +1315,12 @@ function drawFrame(idx) {
   const img = frames[idx];
   const cw = scrollCanvas.width;
   const ch = scrollCanvas.height;
-  const isMobile = window.innerWidth < 600;
+  const isMobile = window.innerWidth < 768;
 
   scrollCtx.clearRect(0, 0, cw, ch);
 
-  let scale, sx, sy, sw, sh, dx, dy, dw, dh;
+  let scale, dx, dy, dw, dh;
 
-  const isMobile = window.innerWidth < 768;
   if (isMobile) {
     // Contain fit on mobile portrait — show full frame, centered, navy background
     scale = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
