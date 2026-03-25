@@ -12,17 +12,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --navy:        #0B1829;
-      --navy-mid:    #1B3664;
-      --navy-card:   rgba(27, 54, 100, 0.25);
-      --green:       #72BE44;
-      --green-dark:  #5A9E30;
-      --green-glow:  rgba(114, 190, 68, 0.35);
-      --white:       #FFFFFF;
-      --gray:        #8BA3C0;
-      --gray-light:  #C5D4E8;
-      --border:      rgba(114, 190, 68, 0.18);
-      --border-blue: rgba(255,255,255,0.08);
+      --navy:        #030712;
+      --navy-mid:    #0F172A;
+      --navy-card:   rgba(15, 23, 42, 0.4);
+      --green:       #A1F85E;
+      --green-dark:  #72BE44;
+      --green-glow:  rgba(161, 248, 94, 0.25);
+      --accent:      rgba(114, 190, 68, 0.2);
+      --white:       #F8FAFC;
+      --gray:        #94A3B8;
+      --gray-light:  #CBD5E1;
+      --border:      rgba(161, 248, 94, 0.2);
+      --border-blue: rgba(255, 255, 255, 0.05);
       --font-head:   'Space Grotesk', sans-serif;
       --font-body:   'Archivo', sans-serif;
     }
@@ -30,7 +31,11 @@
     html { scroll-behavior: auto; font-size: 16px; }
 
     body {
-      background: var(--navy);
+      background-color: var(--navy);
+      background-image: 
+        radial-gradient(ellipse at 50% -20%, rgba(161, 248, 94, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse at 100% 100%, rgba(15, 23, 42, 0.8) 0%, transparent 50%);
+      background-attachment: fixed;
       color: var(--white);
       font-family: var(--font-body);
       overflow-x: hidden;
@@ -245,15 +250,22 @@
 
     .hero-title {
       font-family: var(--font-head);
-      font-size: clamp(2.4rem, 6vw, 5rem);
+      font-size: clamp(2.6rem, 7vw, 5.5rem);
       font-weight: 700;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
       margin-bottom: 24px;
       color: var(--white);
+      text-shadow: 0 4px 32px rgba(0,0,0,0.5);
     }
-    .hero-title .accent { color: var(--green); }
-    .hero-title .line2 { display: block; font-weight: 300; }
+    .hero-title .accent {
+      background: linear-gradient(90deg, var(--green), #4ADE80);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+    .hero-title .line2 { display: block; font-weight: 300; opacity: 0.9; }
 
     .hero-subtitle {
       font-size: clamp(1rem, 2vw, 1.2rem);
@@ -364,13 +376,14 @@
     .anno-card {
       position: absolute;
       z-index: 10;
-      background: rgba(11, 24, 41, 0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 20px 24px;
-      max-width: 280px;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-blue);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 24px;
+      max-width: 300px;
       opacity: 0;
       transform: translateY(16px);
       transition: opacity 0.4s ease, transform 0.4s ease;
@@ -477,13 +490,18 @@
     .sobre-card {
       background: var(--navy-card);
       border: 1px solid var(--border-blue);
-      border-radius: 16px;
-      padding: 28px;
-      transition: border-color 0.3s;
+      border-radius: 20px;
+      padding: 32px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
     }
-    .sobre-card:hover { border-color: var(--border); }
+    .sobre-card:hover { 
+      border-color: var(--border);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5), inset 0 0 20px var(--accent);
+    }
     .sobre-card-head {
-      display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+      display: flex; align-items: center; gap: 16px; margin-bottom: 12px;
     }
     .sobre-card-icon {
       width: 40px; height: 40px; border-radius: 10px;
@@ -522,30 +540,28 @@
       gap: 20px;
       max-width: 1200px; margin: 0 auto;
     }
-    .produtos-grid .produto-card:nth-child(4),
-    .produtos-grid .produto-card:nth-child(5) {
-      /* center the last two cards */
-    }
+    /* centering handled by flex/grid implicitly */
 
     .produto-card {
       background: var(--navy-card);
       border: 1px solid var(--border-blue);
-      border-radius: 20px;
-      padding: 32px;
+      border-radius: 24px;
+      padding: 40px 32px;
       cursor: pointer;
-      transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative; overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
     }
     .produto-card::before {
       content: '';
       position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(114,190,68,0.06), transparent);
-      opacity: 0; transition: opacity 0.3s;
+      background: radial-gradient(circle at top right, var(--accent), transparent 60%);
+      opacity: 0; transition: opacity 0.4s;
     }
     .produto-card:hover {
-      border-color: var(--border);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.4), 0 0 0 1px rgba(114,190,68,0.1);
+      border-color: var(--green);
+      transform: translateY(-8px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px var(--green-glow);
     }
     .produto-card:hover::before { opacity: 1; }
 
@@ -795,20 +811,25 @@
       .newsletter-box { padding: 32px 20px; }
       #scroll-animation { height: 300vh; }
 
-      /* Annotation cards — slim bar at bottom */
+      /* Annotation cards — centralized and beautiful for mobile */
       .anno-card {
-        max-width: calc(50% - 12px);
-        padding: 10px 12px;
-        border-radius: 12px;
+        max-width: 85%;
+        padding: 16px 20px;
+        border-radius: 16px;
+        left: 50% !important;
+        transform: translate(-50%, 16px);
       }
-      .anno-card-desc, .anno-card-stat-label { display: none; }
-      .anno-card-stat { font-size: 1.1rem; }
+      .anno-card.visible {
+        transform: translate(-50%, 0);
+      }
+      .anno-card-desc, .anno-card-stat-label { display: block; font-size: 0.8rem; margin-top: 4px; }
+      .anno-card-stat { font-size: 1.2rem; margin-top: 4px; }
 
-      /* Position all 4 cards at the bottom in a 2×2 grid */
-      #card-1 { left: 8px; top: auto; bottom: 90px; right: auto; }
-      #card-2 { right: 8px; top: auto; bottom: 90px; left: auto; }
-      #card-3 { left: 8px; top: auto; bottom: 16px; right: auto; }
-      #card-4 { right: 8px; top: auto; bottom: 16px; left: auto; }
+      /* Position them stacked or floating near the center/truck axis */
+      #card-1 { top: auto; bottom: 35%; }
+      #card-2 { top: auto; bottom: 35%; }
+      #card-3 { top: auto; bottom: 35%; }
+      #card-4 { top: auto; bottom: 35%; }
 
       .hero-title { font-size: 2.2rem; }
       .hero-subtitle { font-size: 0.95rem; }
@@ -1319,18 +1340,37 @@ function drawFrame(idx) {
 
   scrollCtx.clearRect(0, 0, cw, ch);
 
-  let scale, dx, dy, dw, dh;
+  let scaleCover = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
+  let scaleContain = Math.min(cw / img.naturalWidth, ch / img.naturalHeight);
 
-  // Cover fit on both mobile and desktop — fills canvas edge to edge
-  scale = Math.max(cw / img.naturalWidth, ch / img.naturalHeight);
-  dw = img.naturalWidth * scale;
-  dh = img.naturalHeight * scale;
-  
-  // Center the frame
-  dx = (cw - dw) / 2;
-  dy = (ch - dh) / 2;
+  if (isMobile) {
+    // 1. Draw blurred 'ambi-light' background using Cover fit
+    let dwCover = img.naturalWidth * scaleCover;
+    let dhCover = img.naturalHeight * scaleCover;
+    let dxCover = (cw - dwCover) / 2;
+    let dyCover = (ch - dhCover) / 2;
+    
+    scrollCtx.save();
+    scrollCtx.filter = 'blur(60px) brightness(0.7)';
+    scrollCtx.drawImage(img, dxCover, dyCover, dwCover, dhCover);
+    scrollCtx.restore();
 
-  scrollCtx.drawImage(img, dx, dy, dw, dh);
+    // 2. Draw sharp 'Contain' fit frame on top
+    let dwContain = img.naturalWidth * scaleContain;
+    let dhContain = img.naturalHeight * scaleContain;
+    let dxContain = (cw - dwContain) / 2;
+    // Push the truck slightly up or keep centered
+    let dyContain = (ch - dhContain) / 2 - 40; 
+    
+    scrollCtx.drawImage(img, dxContain, dyContain, dwContain, dhContain);
+  } else {
+    // Desktop: Cover fit
+    let dwCover = img.naturalWidth * scaleCover;
+    let dhCover = img.naturalHeight * scaleCover;
+    let dxCover = (cw - dwCover) / 2;
+    let dyCover = (ch - dhCover) / 2;
+    scrollCtx.drawImage(img, dxCover, dyCover, dwCover, dhCover);
+  }
 
   lastFrame = idx;
 }
